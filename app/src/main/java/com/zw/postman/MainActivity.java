@@ -9,7 +9,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import com.zw.postman.Adapter.MyAdapter;
@@ -64,12 +67,18 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     mRequestURL = new URL(mURL.getText().toString());
                     Identifier identifier = new Identifier(mRequestURL);
-                    mModeSelect.getTag();
-                } catch (Exception e) {
+                    switch (identifier.getMode()) {
+                        case 1:
+                            System.out.println("开始进行第一次HTTP连接尝试");
+                            HttpRequest(mRequestURL);
+                            break;
+                        case 2:
+                            System.out.println("开始进行第一次HTTPS连接尝试");
+
+                    }
+                }catch (IOException e){
                     e.printStackTrace();
                 }
-                Identifier identifier = new Identifier(mRequestURL);
-                identifier.getMode();
             }
         });
 
@@ -85,4 +94,30 @@ public class MainActivity extends AppCompatActivity {
         modes.add("PATCH");
     }
 
+    private void HttpRequest(URL url)throws IOException{
+        int requestCode;
+
+        HttpURLConnection mHttpRequest = (HttpURLConnection) mRequestURL.openConnection();
+        mHttpRequest.getPermission();
+        mHttpRequest.setRequestMethod(mModeSelect.getSelectedItem().toString());
+        mHttpRequest.setConnectTimeout(5000);
+        mHttpRequest.setReadTimeout(10000);
+
+
+
+    }
+    private void HttpSRequest(URL url)throws IOException {
+
+    }
+    private void response(int resposeCode){
+
+        switch(resposeCode){
+            case 200:
+                break;
+            case 404:
+                break;
+            case 301:
+                break;
+        }
+    }
 }
