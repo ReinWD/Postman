@@ -10,21 +10,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 import com.zw.postman.Adapter.MyAdapter;
-import com.zw.postman.HTTP.Identifier;
+import com.zw.postman.HTTP.HttpRequest;
 
 public class MainActivity extends AppCompatActivity {
     URL mRequestURL;
     Spinner mModeSelect;
     TextView mModeDisplay;
+    TextView mContains;
     EditText mURL;
     Button mSend;
-    //    ListView mDropdown ;
     ArrayList<String> modes = new ArrayList<>();
 
     @Override
@@ -33,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initData();
 
+        mContains = (TextView) findViewById(R.id.main_textview_main);
         mModeSelect = (Spinner) findViewById(R.id.main_mode_select);
         mModeDisplay = (TextView) findViewById(R.id.main_text_mode);
         mURL = (EditText) findViewById(R.id.main_et_url_input);
@@ -66,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 //读取模式与URL
                 try {
                     mRequestURL = new URL(mURL.getText().toString());
-                    Identifier identifier = new Identifier(mRequestURL);
-                    switch (identifier.getMode()) {
+                    HttpRequest httpRequest = new HttpRequest(mRequestURL);
+                    switch (httpRequest.getProtocol()) {
                         case 1:
                             System.out.println("开始进行第一次HTTP连接尝试");
-                            HttpRequest(mRequestURL);
+                            mContains.setText(httpRequest.Request());
                             break;
                         case 2:
                             System.out.println("开始进行第一次HTTPS连接尝试");
@@ -94,30 +93,8 @@ public class MainActivity extends AppCompatActivity {
         modes.add("PATCH");
     }
 
-    private void HttpRequest(URL url)throws IOException{
-        int requestCode;
-
-        HttpURLConnection mHttpRequest = (HttpURLConnection) mRequestURL.openConnection();
-        mHttpRequest.getPermission();
-        mHttpRequest.setRequestMethod(mModeSelect.getSelectedItem().toString());
-        mHttpRequest.setConnectTimeout(5000);
-        mHttpRequest.setReadTimeout(10000);
+    public void importData(){}
 
 
 
-    }
-    private void HttpSRequest(URL url)throws IOException {
-
-    }
-    private void response(int resposeCode){
-
-        switch(resposeCode){
-            case 200:
-                break;
-            case 404:
-                break;
-            case 301:
-                break;
-        }
-    }
 }

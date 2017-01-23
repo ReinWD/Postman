@@ -64,6 +64,12 @@
                 android:id="@+id/main_button_send" />
 
         </LinearLayout>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_textview_main" />
     </LinearLayout>
 </RelativeLayout>
 
