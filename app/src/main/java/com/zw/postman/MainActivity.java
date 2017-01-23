@@ -1,5 +1,6 @@
 package com.zw.postman;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     EditText mURL;
     Button mSend;
     ArrayList<String> modes = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +65,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //读取模式与URL
-                try {
-                    mRequestURL = new URL(mURL.getText().toString());
-                    HttpRequest httpRequest = new HttpRequest(mRequestURL);
-                    switch (httpRequest.getProtocol()) {
-                        case 1:
-                            System.out.println("开始进行第一次HTTP连接尝试");
-                            mContains.setText(httpRequest.Request());
-                            break;
-                        case 2:
-                            System.out.println("开始进行第一次HTTPS连接尝试");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            mRequestURL = new URL(mURL.getText().toString());
+                            HttpRequest httpRequest = new HttpRequest(mRequestURL,mModeSelect.getSelectedItem().toString());
+                            switch (httpRequest.getProtocol()) {
+                                case 1:
+                                    System.out.println("开始进行第一次HTTP连接尝试");
+                                    final String result = httpRequest.Request();
+                                    new Handler().post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mContains.setText(result);
+                                        }
+                                    });
+                                    break;
+                                case 2:
+                                    System.out.println("开始进行第一次HTTPS连接尝试");
 
+                            }
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                     }
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
+                }).start();
+
             }
         });
 

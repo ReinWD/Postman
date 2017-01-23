@@ -1,8 +1,15 @@
 package com.zw.postman.HTTP;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -21,12 +28,13 @@ public class HttpRequest {
 
     /**
      * A constructor
-     *   nothing important...
-     * @param url  urls input from outside(your goal).
+     * nothing important...
+     *
+     * @param url     urls input from outside(your goal).
      * @param methods HTTP request method (your selection in MainActivity)
      */
-    public HttpRequest(URL url,String methods) {
-        ModeDetector(url,methods);
+    public HttpRequest(URL url, String methods) {
+        ModeDetector(url, methods);
         setRequestUrl(url);
     }
 
@@ -34,7 +42,8 @@ public class HttpRequest {
 
     /**
      * Select mode for your input.
-     * @param url urls input from outside(your goal).
+     *
+     * @param url     urls input from outside(your goal).
      * @param methods HTTP request method (your selection in MainActivity)
      */
     private void ModeDetector(URL url, String methods) {
@@ -45,7 +54,7 @@ public class HttpRequest {
         int protocolNum;
         if (judgement.isEmpty()) {
             protocolNum = 0;
-        }else if (judgement.startsWith("https")) {
+        } else if (judgement.startsWith("https")) {
             protocolNum = 2;
         } else if (judgement.startsWith("http")) {
             protocolNum = 1;
@@ -71,10 +80,9 @@ public class HttpRequest {
     }
 
     /**
-     * @return
-     *      *0:unknown (throw IOException)
-     *      *1:HTTP
-     *      *2:HTTPs
+     * @return *0:unknown (throw IOException)
+     * *1:HTTP
+     * *2:HTTPs
      */
 
     public int getProtocol() {
@@ -83,6 +91,7 @@ public class HttpRequest {
 
     /**
      * setter for
+     *
      * @param mRequestUrl Meow~
      */
     private void setRequestUrl(URL mRequestUrl) {
@@ -91,6 +100,7 @@ public class HttpRequest {
 
     /**
      * setter for
+     *
      * @param mMethod Meow~
      */
     private void setMethod(String mMethod) {
@@ -99,8 +109,9 @@ public class HttpRequest {
 
     /**
      * Initialize URLConnections and send request.
-     * @return  *Messages if connection is successful.
-     *          *Response code and error message if connection fails.
+     *
+     * @return *Messages if connection is successful.
+     * *Response code and error message if connection fails.
      * @throws IOException if given URL is wrong.
      */
 
@@ -121,10 +132,10 @@ public class HttpRequest {
                 message = mHttpRequest.getResponseMessage();
                 System.out.println(responseCode);
                 System.out.println(message);
-                result = response(responseCode);
+                result = response(mHttpRequest, responseCode);
 
-                if(result.equals("")){
-                    result = String.valueOf(responseCode)+"\n"+message;
+                if (result.equals("")) {
+                    result = String.valueOf(responseCode) + "\n" + message;
                 }
                 break;
             case 2:
@@ -134,13 +145,13 @@ public class HttpRequest {
                 mHttpSRequest.setConnectTimeout(5000);
                 mHttpSRequest.setReadTimeout(10000);
 
-                responseCode=mHttpSRequest.getResponseCode();
+                responseCode = mHttpSRequest.getResponseCode();
                 message = mHttpSRequest.getResponseMessage();
                 System.out.println(responseCode);
                 System.out.println(message);
-                result = response(responseCode);
-                if(result.equals("")){
-                    result = String.valueOf(responseCode)+"\n"+message;
+                result = response(mHttpSRequest, responseCode);
+                if (result.equals("")) {
+                    result = String.valueOf(responseCode) + "\n" + message;
                 }
                 break;
             default:
@@ -153,17 +164,19 @@ public class HttpRequest {
     /**
      * Response according to response code
      * refer to http://http.cats (for fun)
-     *       or https://en.wikipedia.org/wiki/List_of_HTTP_status_codes (for more information)
+     * or https://en.wikipedia.org/wiki/List_of_HTTP_status_codes (for more information)
+     *
      * @param responseCode response code from former request.
+     * @param connection   URLConnection used in Request() above.
      * @return "" when we failed to receive information we expected.
-     *         information we want if we got great progress.
+     * information we want if we got great progress.
      */
 
-    private String response(int responseCode) {
+    private String response(URLConnection connection, int responseCode) {
 
         switch (responseCode) {
             case 200://OK
-                break;
+                return readData(connection);
             case 201://Created
                 break;
             case 202://Accepted
@@ -234,6 +247,41 @@ public class HttpRequest {
                 break;
             default:
                 break;
+        }
+        return "";
+    }
+
+    /**
+     * read data from response InputStream
+     * @param connection URLConnection used in response()
+     * @return results from target
+     */
+    private String readData(URLConnection connection) {
+        InputStream inputStream;
+        InputStreamReader reader;
+        OutputStream outputStream;
+        OutputStreamWriter writer;
+        BufferedReader buff;
+        String cache;
+        try {
+            inputStream = connection.getInputStream();
+            outputStream = new ByteArrayOutputStream();
+            reader = new InputStreamReader(inputStream);
+            buff = new BufferedReader(reader);
+            writer = new OutputStreamWriter(outputStream);
+            while ((cache = buff.readLine()) != null) {
+                writer.write(cache);
+            }
+            String result = writer.toString();
+            reader.close();
+            buff.close();
+            writer.close();
+            inputStream.close();
+            outputStream.close();
+            return result;
+        } catch (IOException e
+                ) {
+            e.printStackTrace();
         }
         return "";
     }
