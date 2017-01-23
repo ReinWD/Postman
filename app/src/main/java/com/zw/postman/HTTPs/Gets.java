@@ -1,4 +1,4 @@
-package HTTPs;
+package com.zw.postman.HTTPs;
 
 /**
  * Created by 张巍 on 2017/1/21.

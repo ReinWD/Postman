@@ -1,4 +1,4 @@
-package HTTP;
+package com.zw.postman.HTTP;
 
 import java.net.URL;
 
@@ -12,7 +12,7 @@ public class Identifier {
     private int protocolNum,mode;
 
     public Identifier(URL url) {
-        protocolDetector(url);
+        ModeDetector(protocolDetector(url));
 
     }
 
@@ -31,9 +31,15 @@ public class Identifier {
         return protocolNum;
     }
 
-    private int ModeDetector(){
-        return 0;
+    private void ModeDetector(int modes){
+        switch (modes){
+            case 1:
+                System.out.println("HTTP");
+        }
     }
 
 
+    public int getMode() {
+        return mode;
+    }
 }
