@@ -1,12 +1,15 @@
 package com.zw.postman;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter(this, modes);
         mModeSelect.setAdapter(adapter);
 
+        mContains.setMovementMethod(ScrollingMovementMethod.getInstance());
+
         //设置侦听器
         mModeSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -65,33 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //读取模式与URL
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mRequestURL = new URL(mURL.getText().toString());
-                            HttpRequest httpRequest = new HttpRequest(mRequestURL,mModeSelect.getSelectedItem().toString());
-                            switch (httpRequest.getProtocol()) {
-                                case 1:
-                                    System.out.println("开始进行第一次HTTP连接尝试");
-                                    final String result = httpRequest.Request();
-                                    new Handler().post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mContains.setText(result);
-                                        }
-                                    });
-                                    break;
-                                case 2:
-                                    System.out.println("开始进行第一次HTTPS连接尝试");
-
-                            }
-                        }catch (IOException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-
+                new HttpThread().start();
             }
         });
 
@@ -107,8 +86,45 @@ public class MainActivity extends AppCompatActivity {
         modes.add("PATCH");
     }
 
-    public void importData(){}
+    public class HttpThread extends Thread {
 
+        @Override
+        public void run() {
+            try {
+                mRequestURL = new URL(mURL.getText().toString());
+                HttpRequest httpRequest = new HttpRequest(mRequestURL, mModeSelect.getSelectedItem().toString());
+                switch (httpRequest.getProtocol()) {
+                    case 1:
+                        System.out.println("开始进行第一次HTTP连接尝试");
+                        final String result = httpRequest.Request();
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mContains.setText(result);
+                            }
+                        });
+                        break;
+                    case 2:
+                        System.out.println("开始进行第一次HTTPS连接尝试");
+                        final String resultS = httpRequest.Request();
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mContains.setText(resultS);
+                            }
+                        });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContains.setText("A problem occurred\nCheck your URL\nor your network connection");
+                    }
+                });
+            }
+        }
 
+    }
 
 }

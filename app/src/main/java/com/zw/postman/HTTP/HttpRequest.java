@@ -134,7 +134,7 @@ public class HttpRequest {
                 System.out.println(message);
                 result = response(mHttpRequest, responseCode);
 
-                if (result.equals("")) {
+                if (result.equals(" ")) {
                     result = String.valueOf(responseCode) + "\n" + message;
                 }
                 break;
@@ -150,7 +150,8 @@ public class HttpRequest {
                 System.out.println(responseCode);
                 System.out.println(message);
                 result = response(mHttpSRequest, responseCode);
-                if (result.equals("")) {
+
+                if (result.equals(" ")) {
                     result = String.valueOf(responseCode) + "\n" + message;
                 }
                 break;
@@ -248,7 +249,7 @@ public class HttpRequest {
             default:
                 break;
         }
-        return "";
+        return " ";
     }
 
     /**
@@ -258,24 +259,15 @@ public class HttpRequest {
      */
     private String readData(URLConnection connection) {
         InputStream inputStream;
-        InputStreamReader reader;
         OutputStream outputStream;
-        OutputStreamWriter writer;
-        BufferedReader buff;
-        String cache;
+        int cache;
         try {
             inputStream = connection.getInputStream();
             outputStream = new ByteArrayOutputStream();
-            reader = new InputStreamReader(inputStream);
-            buff = new BufferedReader(reader);
-            writer = new OutputStreamWriter(outputStream);
-            while ((cache = buff.readLine()) != null) {
-                writer.write(cache);
+            while ((cache = inputStream.read()) != -1) {
+                outputStream.write(cache);
             }
-            String result = writer.toString();
-            reader.close();
-            buff.close();
-            writer.close();
+            String result = outputStream.toString();
             inputStream.close();
             outputStream.close();
             return result;

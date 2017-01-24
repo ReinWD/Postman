@@ -9,42 +9,57 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.zw.postman.MainActivity">
+    tools:context="com.zw.postman.MainActivity"
+    android:background="@color/colorBackground">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="0dp"
+        android:elevation="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:padding="5dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:layout_gravity="center_vertical">
+            android:elevation="7dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:padding="5dp">
 
             <Spinner
                 android:id="@+id/main_mode_select"
                 android:elevation="2dp"
-                android:gravity="top|end"
-                android:layout_weight="1.2"
-                android:layout_width="0dp"
                 android:addStatesFromChildren="false"
-                android:layout_height="match_parent" />
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@android:drawable/arrow_down_float"
+                android:minHeight="0dp"
+                android:layout_width="25dp"
+                android:backgroundTint="@color/colorPrimaryDark_transparent"
+                android:backgroundTintMode="src_in"
+                android:layout_marginRight="10dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:soundEffectsEnabled="true"/>
 
             <TextView
                 android:text="GET"
                 android:id="@+id/main_text_mode"
-                android:layout_weight="1.43"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:elevation="0dp"
                 android:gravity="center_vertical|center_horizontal"
-                android:clickable="true" />
+                android:clickable="true"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:background="@color/colorPrimaryDark_transparent" />
 
             <EditText
                 android:layout_width="0dp"
@@ -54,22 +69,72 @@
                 android:id="@+id/main_et_url_input"
                 android:layout_weight="6"
                 android:textSize="14sp"
-                android:contentDescription="URL" />
+                android:contentDescription="URL"
+                android:background="@color/colorPrimary_transparent"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp" />
 
             <Button
                 android:text="SEND"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:id="@+id/main_button_send" />
+                android:layout_height="match_parent"
+                android:id="@+id/main_button_send"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@color/colorPrimaryDark_transparent" />
 
         </LinearLayout>
 
         <TextView
-            android:text="TextView"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/main_textview_main"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            android:overScrollMode="ifContentScrolls"
+            android:elevation="0dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/screen_background_dark_transparent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/main_textview_main" />
+            android:layout_alignParentTop="true">
+
+            <ToggleButton
+                android:text="ToggleButton"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButton"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_width="match_parent"
+                android:textOff="Read"
+                android:textOn="Edit"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:layout_margin="5dp"
+                android:minHeight="45dp" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:minHeight="45dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_vertical|center_horizontal" />
+        </LinearLayout>
+
     </LinearLayout>
+
+
 </RelativeLayout>
 
