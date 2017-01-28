@@ -1,13 +1,12 @@
 package com.zw.postman.HTTP;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -23,20 +22,28 @@ public class HttpRequest {
      * declaration.
      */
     private URL mRequestUrl;
-    private int protocol;
-    private String method;
+    private String mMethod;
+    private String mProtocol;
+
+
+
+    private int protocolNum;
 
     /**
      * A constructor
      * nothing important...
      *
      * @param url     urls input from outside(your goal).
-     * @param methods HTTP request method (your selection in MainActivity)
+     * @param methods HTTP request mMethod (your selection in MainActivity)
      */
-    public HttpRequest(URL url, String methods) {
-        ModeDetector(url, methods);
-        setRequestUrl(url);
-    }
+    public HttpRequest(URL url, String methods, String protocol) {
+
+            ModeDetector(url, methods, protocol);
+
+                setRequestUrl(url);
+
+            }
+
 
     //通过检测开头来确定请求协议（1为HTTP，2为HTTPS）
 
@@ -44,37 +51,22 @@ public class HttpRequest {
      * Select mode for your input.
      *
      * @param url     urls input from outside(your goal).
-     * @param methods HTTP request method (your selection in MainActivity)
+     * @param methods HTTP request mMethod (your selection in MainActivity)
      */
-    private void ModeDetector(URL url, String methods) {
+    private void ModeDetector(URL url, String methods, String protocol) {
 
         //协议检测
         String judgement;
         judgement = url.toString().toLowerCase();
-        int protocolNum;
         if (judgement.isEmpty()) {
-            protocolNum = 0;
         } else if (judgement.startsWith("https")) {
+            System.out.println("HTTPS");
             protocolNum = 2;
         } else if (judgement.startsWith("http")) {
+            System.out.println("HTTP");
             protocolNum = 1;
-        } else protocolNum = 0;
-
-        //协议设定
-        switch (protocolNum) {
-            case 1:
-                System.out.println("HTTP");
-                protocol = 1;
-                break;
-            case 2:
-                System.out.println("HTTPS");
-                protocol = 2;
-                break;
-            default:
-                System.out.println("模式错误");
-                break;
-        }
-
+        } else {mProtocol = protocol.replace("://", "");
+        if(mProtocol.startsWith("https"))protocolNum = 2;else protocolNum = 1;}
         //设定工作模式
         setMethod(methods);
     }
@@ -84,11 +76,9 @@ public class HttpRequest {
      * *1:HTTP
      * *2:HTTPs
      */
-
     public int getProtocol() {
-        return protocol;
+        return protocolNum;
     }
-
     /**
      * setter for
      *
@@ -104,7 +94,7 @@ public class HttpRequest {
      * @param mMethod Meow~
      */
     private void setMethod(String mMethod) {
-        this.method = mMethod;
+        this.mMethod = mMethod;
     }
 
     /**
@@ -119,45 +109,50 @@ public class HttpRequest {
         int responseCode;
         String result;
         String message;
+        try {
+        switch (protocolNum) {
 
-        switch (protocol) {
-            case 1:
-                HttpURLConnection mHttpRequest = (HttpURLConnection) mRequestUrl.openConnection();
-                mHttpRequest.getPermission();
-                mHttpRequest.setRequestMethod(method);
-                mHttpRequest.setConnectTimeout(5000);
-                mHttpRequest.setReadTimeout(10000);
+                case 1:
+                    HttpURLConnection mHttpRequest = (HttpURLConnection) mRequestUrl.openConnection();
+                    mHttpRequest.getPermission();
+                    mHttpRequest.setRequestMethod(mMethod);
+                    mHttpRequest.setConnectTimeout(5000);
+                    mHttpRequest.setReadTimeout(10000);
 
-                responseCode = mHttpRequest.getResponseCode();
-                message = mHttpRequest.getResponseMessage();
-                System.out.println(responseCode);
-                System.out.println(message);
-                result = response(mHttpRequest, responseCode);
+                    responseCode = mHttpRequest.getResponseCode();
+                    message = mHttpRequest.getResponseMessage();
+                    System.out.println(responseCode);
+                    System.out.println(message);
+                    result = response(mHttpRequest, responseCode);
 
-                if (result.equals(" ")) {
-                    result = String.valueOf(responseCode) + "\n" + message;
-                }
-                break;
-            case 2:
-                HttpsURLConnection mHttpSRequest = (HttpsURLConnection) mRequestUrl.openConnection();
-                mHttpSRequest.getPermission();
-                mHttpSRequest.setRequestMethod(method);
-                mHttpSRequest.setConnectTimeout(5000);
-                mHttpSRequest.setReadTimeout(10000);
+                    if (result.equals(" ")) {
+                        result = String.valueOf(responseCode) + "\n" + message;
+                    }
+                    break;
+                case 2:
+                    HttpsURLConnection mHttpSRequest = (HttpsURLConnection) mRequestUrl.openConnection();
+                    mHttpSRequest.getPermission();
+                    mHttpSRequest.setRequestMethod(mMethod);
+                    mHttpSRequest.setConnectTimeout(5000);
+                    mHttpSRequest.setReadTimeout(10000);
 
-                responseCode = mHttpSRequest.getResponseCode();
-                message = mHttpSRequest.getResponseMessage();
-                System.out.println(responseCode);
-                System.out.println(message);
-                result = response(mHttpSRequest, responseCode);
+                    responseCode = mHttpSRequest.getResponseCode();
+                    message = mHttpSRequest.getResponseMessage();
+                    System.out.println(responseCode);
+                    System.out.println(message);
+                    result = response(mHttpSRequest, responseCode);
 
-                if (result.equals(" ")) {
-                    result = String.valueOf(responseCode) + "\n" + message;
-                }
-                break;
-            default:
-                result = "Failed to identify http or https";
-                break;
+                    if (result.equals(" ")) {
+                        result = String.valueOf(responseCode) + "\n" + message;
+                    }
+                    break;
+                default:
+                    result = "Failed to identify http or https";
+                    break;
+            }
+        }catch (SocketTimeoutException e){
+            System.out.println("连接超时");
+            result = "Connect Time Out!";
         }
         return result;
     }
@@ -254,6 +249,7 @@ public class HttpRequest {
 
     /**
      * read data from response InputStream
+     *
      * @param connection URLConnection used in response()
      * @return results from target
      */

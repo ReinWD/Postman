@@ -6,4 +6,5 @@
     <color name="colorBackground">#edc97e3d</color>
     <color name="colorPrimary_transparent">#62464646</color>
     <color name="colorPrimaryDark_transparent">#64222222</color>
+    <color name="font">#baffffff</color>
 </resources>
