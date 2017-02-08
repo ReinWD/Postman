@@ -119,11 +119,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <EditText
+            <android.support.v7.widget.RecyclerView
                 android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/main_edittext_contents_main"
+                android:id="@+id/main_recyclerView_contents_main"
                 android:scrollbars="vertical"
                 android:fadeScrollbars="true"
                 android:overScrollMode="always"

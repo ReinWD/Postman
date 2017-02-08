@@ -7,4 +7,5 @@
     <color name="colorPrimary_transparent">#62464646</color>
     <color name="colorPrimaryDark_transparent">#64222222</color>
     <color name="font">#baffffff</color>
+    <color name="none">#00f47023</color>
 </resources>

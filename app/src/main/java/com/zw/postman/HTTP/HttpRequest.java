@@ -1,15 +1,14 @@
-package com.zw.postman.HTTP;
+package com.zw.postman.http;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
-
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -20,29 +19,27 @@ import javax.net.ssl.HttpsURLConnection;
 public class HttpRequest {
     /**
      * declaration.
+     * mRequestUrl :
+     *
      */
     private URL mRequestUrl;
     private String mMethod;
-    private String mProtocol;
-
-
-
     private int protocolNum;
 
     /**
      * A constructor
      * nothing important...
-     *
      * @param url     urls input from outside(your goal).
      * @param methods HTTP request mMethod (your selection in MainActivity)
+     * @param protocol HTTP Connection protocol.
      */
     public HttpRequest(URL url, String methods, String protocol) {
 
-            ModeDetector(url, methods, protocol);
+        ModeDetector(url, methods, protocol);
 
-                setRequestUrl(url);
+        setRequestUrl(url);
 
-            }
+    }
 
 
     //通过检测开头来确定请求协议（1为HTTP，2为HTTPS）
@@ -65,8 +62,11 @@ public class HttpRequest {
         } else if (judgement.startsWith("http")) {
             System.out.println("HTTP");
             protocolNum = 1;
-        } else {mProtocol = protocol.replace("://", "");
-        if(mProtocol.startsWith("https"))protocolNum = 2;else protocolNum = 1;}
+        } else {
+            String mProtocol = protocol.replace("://", "");
+            if (mProtocol.startsWith("https")) protocolNum = 2;
+            else protocolNum = 1;
+        }
         //设定工作模式
         setMethod(methods);
     }
@@ -79,9 +79,9 @@ public class HttpRequest {
     public int getProtocol() {
         return protocolNum;
     }
+
     /**
      * setter for
-     *
      * @param mRequestUrl Meow~
      */
     private void setRequestUrl(URL mRequestUrl) {
@@ -90,7 +90,6 @@ public class HttpRequest {
 
     /**
      * setter for
-     *
      * @param mMethod Meow~
      */
     private void setMethod(String mMethod) {
@@ -99,19 +98,19 @@ public class HttpRequest {
 
     /**
      * Initialize URLConnections and send request.
-     *
-     * @return *Messages if connection is successful.
-     * *Response code and error message if connection fails.
+     * @return
+     *  *Messages if connection is successful.
+     *  *Response code and error message if connection fails.
+     *  *"check your URL or Internet connection"
      * @throws IOException if given URL is wrong.
      */
 
-    public String Request() throws IOException {
+    public ArrayList<String> Request() throws IOException {
         int responseCode;
-        String result;
+        ArrayList<String> result;
         String message;
         try {
-        switch (protocolNum) {
-
+            switch (protocolNum) {
                 case 1:
                     HttpURLConnection mHttpRequest = (HttpURLConnection) mRequestUrl.openConnection();
                     mHttpRequest.getPermission();
@@ -125,8 +124,9 @@ public class HttpRequest {
                     System.out.println(message);
                     result = response(mHttpRequest, responseCode);
 
-                    if (result.equals(" ")) {
-                        result = String.valueOf(responseCode) + "\n" + message;
+                    if (result.isEmpty()) {
+                        result = new ArrayList<>();
+                        result.add(String.valueOf(responseCode) + "\n" + message);
                     }
                     break;
                 case 2:
@@ -142,33 +142,39 @@ public class HttpRequest {
                     System.out.println(message);
                     result = response(mHttpSRequest, responseCode);
 
-                    if (result.equals(" ")) {
-                        result = String.valueOf(responseCode) + "\n" + message;
+                    if (result.isEmpty()) {
+                        result = new ArrayList<>();
+                        result.add(String.valueOf(responseCode) + "\n" + message);
                     }
                     break;
                 default:
-                    result = "Failed to identify http or https";
+                    result = new ArrayList<>();
                     break;
             }
-        }catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException e1) {
             System.out.println("连接超时");
-            result = "Connect Time Out!";
+            result = new ArrayList<>();
+            result.add("Connect Time Out!");
+        } catch (UnknownHostException e2) {
+            System.out.println("URL 错误");
+            result = new ArrayList<>();
+            result.add("check your URL or Internet connection");
         }
         return result;
     }
 
     /**
-     * Response according to response code
+     * Response according to response code.
      * refer to http://http.cats (for fun)
-     * or https://en.wikipedia.org/wiki/List_of_HTTP_status_codes (for more information)
-     *
+     * or https://en.wikipedia.org/wiki/List_of_HTTP_status_codes. (for more information)
      * @param responseCode response code from former request.
      * @param connection   URLConnection used in Request() above.
-     * @return "" when we failed to receive information we expected.
-     * information we want if we got great progress.
+     * @return
+     *  An empty ArrayList when we failed to receive information we expected.
+     *  information we want if we got great progress.
      */
 
-    private String response(URLConnection connection, int responseCode) {
+    private ArrayList<String> response(URLConnection connection, int responseCode) {
 
         switch (responseCode) {
             case 200://OK
@@ -244,34 +250,51 @@ public class HttpRequest {
             default:
                 break;
         }
-        return " ";
+        return new ArrayList<>();
     }
 
     /**
-     * read data from response InputStream
-     *
-     * @param connection URLConnection used in response()
-     * @return results from target
+     * read data from response InputStream.
+     * @param connection URLConnection used in response() .
+     * @return results from target connection.
      */
-    private String readData(URLConnection connection) {
+    private ArrayList<String> readData(URLConnection connection) {
+        /**
+         * @Boolean done : whether the end of data is read;
+         * @InputStream inputStream : InputStream of this HTTP request;
+         * @OutputStream outputStream : OutputStream of this HTTP request;
+         * @BufferedReader reader: read data from inputStream
+         * @ArrayList cache : byte
+         */
         InputStream inputStream;
-        OutputStream outputStream;
         int cache;
+        int i = 0;
+        ArrayList<String> result;
         try {
+            result = new ArrayList<>();
             inputStream = connection.getInputStream();
-            outputStream = new ByteArrayOutputStream();
-            while ((cache = inputStream.read()) != -1) {
-                outputStream.write(cache);
+            ByteArrayOutputStream httpOutput = new ByteArrayOutputStream();
+            while (!((cache = inputStream.read()) == -1)) {
+                switch (cache){
+                    case 62:
+                        httpOutput.write(cache);i++;
+                        result.add(httpOutput.toString());
+                        httpOutput.reset();
+                        break;
+                    default:
+                        httpOutput.write(cache);i++;
+                }if(i>10000){
+                    result.add(httpOutput.toString());
+                    httpOutput.reset();i=0;
+                }
             }
-            String result = outputStream.toString();
             inputStream.close();
-            outputStream.close();
+            httpOutput.close();
             return result;
-        } catch (IOException e
-                ) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+        return new ArrayList<>();
     }
 
 }

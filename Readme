@@ -1,0 +1,16 @@
+Postman 移动端
+
+API 14;
+开发目的: 寒假作业+练手+学习一个 HTTP的姿势;(@某随学姐)
+
+包内文件说明：
+com.zw.postman.MainActivity :
+    主Activity,包括了所有可进行的操作;
+com.zw.postman.http.HttpRequest :
+    网络请求模块，
+
+<开发日志:2017/2/7>
+完成了代码读取部分的代码;
+开始记录开发日志;
+
+

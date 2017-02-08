@@ -1,4 +1,4 @@
-package com.zw.postman.Adapter;
+package com.zw.postman.adapter;
 
 import android.content.Context;
 import android.database.DataSetObserver;
