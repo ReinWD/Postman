@@ -1,10 +1,11 @@
 package com.zw.postman;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -19,17 +20,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import com.zw.postman.adapter.MyAdapter;
 import com.zw.postman.adapter.RecyclerAdapter;
+import com.zw.postman.http.Browser;
 import com.zw.postman.http.HttpRequest;
 
 import static android.view.KeyEvent.KEYCODE_ENTER;
 
-public class MainActivity extends Activity implements Runnable {
+public class MainActivity extends AppCompatActivity implements Runnable {
     Boolean mReadable;
     Context mMain = this;
     URL mRequestURL;
@@ -46,6 +51,7 @@ public class MainActivity extends Activity implements Runnable {
     ArrayList<String> mModes = new ArrayList<>();
     ArrayList<String> mProtocol = new ArrayList<>();
     ArrayList<String> mData = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,12 +241,35 @@ public class MainActivity extends Activity implements Runnable {
         mPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = new Toast(getApplicationContext());
-                toast.setView(v);
-                toast.makeText(getApplicationContext(), "sorry...", Toast.LENGTH_SHORT).show();
+                String target;
+//                File html=null;
+//                String wow = mData.toString();
+//                boolean finish;
+//                finish = false;
+//                for (int i = 0;!finish;i++) {
+//                    html = new File(getFilesDir().getPath()+"/"+"webPageCache"+i+".html");
+//                    if (!html.exists()&&!wow.isEmpty()){
+//                            try {
+//                                if(finish = html.createNewFile()) {
+//                                    FileWriter HarukiMurakami = new FileWriter(html);
+//                                    HarukiMurakami.write(wow);
+//                                    HarukiMurakami.close();
+//                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+                    target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
+                    Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
+                    toWebBrowser.putExtra("url", target);
+                    startActivity(toWebBrowser);
+
+
             }
         });
     }
+
     public boolean getReadable(){
         mReadable = (mEditable.isChecked());
         return mReadable;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Postman</string>
+    <string name="app_name">Postman Mobile</string>
 
     <string-array name="methods">
         <item>GET</item>

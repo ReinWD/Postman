@@ -9,6 +9,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map;
+
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -20,17 +22,18 @@ public class HttpRequest {
     /**
      * declaration.
      * mRequestUrl :
-     *
      */
     private URL mRequestUrl;
     private String mMethod;
     private int protocolNum;
+    private Map mParams;
 
     /**
      * A constructor
      * nothing important...
-     * @param url     urls input from outside(your goal).
-     * @param methods HTTP request mMethod (your selection in MainActivity)
+     *
+     * @param url      urls input from outside(your goal).
+     * @param methods  HTTP request mMethod (your selection in MainActivity)
      * @param protocol HTTP Connection protocol.
      */
     public HttpRequest(URL url, String methods, String protocol) {
@@ -41,34 +44,13 @@ public class HttpRequest {
 
     }
 
-
-    //通过检测开头来确定请求协议（1为HTTP，2为HTTPS）
-
     /**
-     * Select mode for your input.
-     *
-     * @param url     urls input from outside(your goal).
-     * @param methods HTTP request mMethod (your selection in MainActivity)
+     * set params for your connection.
+     * @param map params
+     *            usage:Map<key,value>
      */
-    private void ModeDetector(URL url, String methods, String protocol) {
-
-        //协议检测
-        String judgement;
-        judgement = url.toString().toLowerCase();
-        if (judgement.isEmpty()) {
-        } else if (judgement.startsWith("https")) {
-            System.out.println("HTTPS");
-            protocolNum = 2;
-        } else if (judgement.startsWith("http")) {
-            System.out.println("HTTP");
-            protocolNum = 1;
-        } else {
-            String mProtocol = protocol.replace("://", "");
-            if (mProtocol.startsWith("https")) protocolNum = 2;
-            else protocolNum = 1;
-        }
-        //设定工作模式
-        setMethod(methods);
+    public void setParams(Map<String,String> map){
+        mParams = map;
     }
 
     /**
@@ -81,27 +63,11 @@ public class HttpRequest {
     }
 
     /**
-     * setter for
-     * @param mRequestUrl Meow~
-     */
-    private void setRequestUrl(URL mRequestUrl) {
-        this.mRequestUrl = mRequestUrl;
-    }
-
-    /**
-     * setter for
-     * @param mMethod Meow~
-     */
-    private void setMethod(String mMethod) {
-        this.mMethod = mMethod;
-    }
-
-    /**
      * Initialize URLConnections and send request.
-     * @return
-     *  *Messages if connection is successful.
-     *  *Response code and error message if connection fails.
-     *  *"check your URL or Internet connection"
+     *
+     * @return *Messages if connection is successful.
+     * *Response code and error message if connection fails.
+     * *"check your URL or Internet connection"
      * @throws IOException if given URL is wrong.
      */
 
@@ -164,14 +130,23 @@ public class HttpRequest {
     }
 
     /**
+     * setter for
+     *
+     * @param mMethod Meow~
+     */
+    private void setMethod(String mMethod) {
+        this.mMethod = mMethod;
+    }
+
+    /**
      * Response according to response code.
      * refer to http://http.cats (for fun)
      * or https://en.wikipedia.org/wiki/List_of_HTTP_status_codes. (for more information)
+     *
      * @param responseCode response code from former request.
      * @param connection   URLConnection used in Request() above.
-     * @return
-     *  An empty ArrayList when we failed to receive information we expected.
-     *  information we want if we got great progress.
+     * @return An empty ArrayList when we failed to receive information we expected.
+     * information we want if we got great progress.
      */
 
     private ArrayList<String> response(URLConnection connection, int responseCode) {
@@ -255,6 +230,7 @@ public class HttpRequest {
 
     /**
      * read data from response InputStream.
+     *
      * @param connection URLConnection used in response() .
      * @return results from target connection.
      */
@@ -268,24 +244,25 @@ public class HttpRequest {
          */
         InputStream inputStream;
         int cache;
-        int i = 0;
         ArrayList<String> result;
         try {
             result = new ArrayList<>();
             inputStream = connection.getInputStream();
             ByteArrayOutputStream httpOutput = new ByteArrayOutputStream();
             while (!((cache = inputStream.read()) == -1)) {
-                switch (cache){
+                switch (cache) {
                     case 62:
-                        httpOutput.write(cache);i++;
+                        httpOutput.write(cache);
                         result.add(httpOutput.toString());
                         httpOutput.reset();
                         break;
+                    case 35:
+                        result.add(httpOutput.toString());
+                        httpOutput.reset();
+                        httpOutput.write(cache);
+                        break;
                     default:
-                        httpOutput.write(cache);i++;
-                }if(i>10000){
-                    result.add(httpOutput.toString());
-                    httpOutput.reset();i=0;
+                        httpOutput.write(cache);
                 }
             }
             inputStream.close();
@@ -297,4 +274,39 @@ public class HttpRequest {
         return new ArrayList<>();
     }
 
+    /**
+     * setter for
+     *
+     * @param mRequestUrl Meow~
+     */
+    private void setRequestUrl(URL mRequestUrl) {
+        this.mRequestUrl = mRequestUrl;
+    }
+
+    /**
+     * Select mode for your input.
+     *
+     * @param url     urls input from outside(your goal).
+     * @param methods HTTP request mMethod (your selection in MainActivity)
+     */
+    private void ModeDetector(URL url, String methods, String protocol) {
+
+        //协议检测
+        String judgement;
+        judgement = url.toString().toLowerCase();
+        if (judgement.isEmpty()) {
+        } else if (judgement.startsWith("https")) {
+            System.out.println("HTTPS");
+            protocolNum = 2;
+        } else if (judgement.startsWith("http")) {
+            System.out.println("HTTP");
+            protocolNum = 1;
+        } else {
+            String mProtocol = protocol.replace("://", "");
+            if (mProtocol.startsWith("https")) protocolNum = 2;
+            else protocolNum = 1;
+        }
+        //设定工作模式
+        setMethod(methods);
+    } //通过检测开头来确定请求协议（1为HTTP，2为HTTPS）
 }
