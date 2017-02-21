@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     EditText mURL;
     RecyclerView mContains;
     RecyclerAdapter mRecyclerAdapter;
+    ProgressBar mProgressbar;
     Button mSend;
     Button mPreview;
     ToggleButton mEditable;
@@ -69,11 +71,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mModes.add("DELETE");
         mModes.add("COPY");
         mModes.add("PATCH");
+        mModes.add("ADVANCED");
     }
 
-    public class HttpThread extends Thread{
+    public class HttpThread extends Thread {
         @Override
-        public void run(){
+        public void run() {
             try {
                 mRequestURL = new URL(mURL.getText().toString());
             } catch (Exception e1) {
@@ -85,18 +88,18 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
             try {
                 HttpRequest httpRequest = new HttpRequest(mRequestURL, mModeSelect.getSelectedItem().toString(), mProtocolDisplay.getText().toString().toLowerCase());
-                   switch (httpRequest.getProtocol()) {
-                       case 1:
-                           System.out.println("开始进行第一次HTTP连接尝试");
-                           mData = httpRequest.Request();
-                           break;
-                       case 2:
-                           System.out.println("开始进行第一次HTTPS连接尝试");
-                           mData = httpRequest.Request();
-                   }
+                switch (httpRequest.getProtocol()) {
+                    case 1:
+                        System.out.println("开始进行第一次HTTP连接尝试");
+                        mData = httpRequest.Request();
+                        break;
+                    case 2:
+                        System.out.println("开始进行第一次HTTPS连接尝试");
+                        mData = httpRequest.Request();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-                        mData = new ArrayList<>();
+                mData = new ArrayList<>();
                 mData.add("A problem occurred\\nCheck your URL\\nor your network connection");
             }
             Handler handler = new Handler(Looper.getMainLooper());
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
          * RecyclerView
          */
         mContains = (RecyclerView) findViewById(R.id.main_recyclerView_contents_main);
-        mRecyclerAdapter = new RecyclerAdapter(this,mData);
+        mRecyclerAdapter = new RecyclerAdapter(this, mData);
         mContains.setAdapter(mRecyclerAdapter);
         mContains.setLayoutManager(new LinearLayoutManager(this));
         /**
@@ -152,6 +155,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         /**
          * 设置侦听器
          */
+
+        mURL.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+            }
+        });
+        //---------------------\---------------------------------------------------------------------
         mURL.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -165,7 +175,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mModeSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mModeDisplay.setText(mModeSelect.getItemAtPosition(position).toString());
+                String target = mModeSelect.getItemAtPosition(position).toString();
+                if (target.equals("ADVANCED")) {
+                    Intent intent = new Intent(MainActivity.this, AdvancedSettingActivity.class);
+                    startActivity(intent);
+                }
+                mModeDisplay.setText(target);
             }
             //选中的条目会实时显示在spinner旁边的TextView里
 
@@ -178,15 +193,17 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mModeDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(mURL.getWindowToken(), 0);
                 mModeSelect.performClick();
             }
         });
         mProtocolDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mProtocolDisplay.getText().equals("https://")){
+                if (mProtocolDisplay.getText().equals("https://")) {
                     mProtocolDisplay.setText("http://");
-                }else{
+                } else {
                     mProtocolDisplay.setText("https://");
                 }
             }
@@ -196,21 +213,34 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mSend.setOnClickListener(new View.OnClickListener() {
 
             Thread httpRequestThread = new HttpThread();
+
             @Override
-            public void onClick(View v) {InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.hideSoftInputFromWindow(mURL.getWindowToken(),0);
+            public void onClick(View v) {
+                InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(mURL.getWindowToken(), 0);
                 mData = new ArrayList<>();
                 mData.add("Processing");
                 mRecyclerAdapter.setData(mData);
-                mContains.setAdapter(mRecyclerAdapter);
-                httpRequestThread.start();
+                mRecyclerAdapter.notifyDataSetChanged();
+                if (!httpRequestThread.isAlive()) {
+                    try {
+                        httpRequestThread.start();
+                    } catch (Exception e) {
+                        mData = new ArrayList<String>();
+                        mData.add("Request Interrupted");
+                        mRecyclerAdapter.notifyDataSetChanged();
+                        e.printStackTrace();
+                    }
+                } else {
+                    httpRequestThread.interrupt();
+                }
             }
         });
         //------------------------------------------------------------------------------------------
         mEditable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                      mRecyclerAdapter.setEditable(isChecked);
+                mRecyclerAdapter.setEditable(isChecked);
             }
         });
         //------------------------------------------------------------------------------------------
@@ -236,10 +266,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 //                            }
 //                        }
 //                    }
-                    target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
-                    Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
-                    toWebBrowser.putExtra("url", target);
-                    startActivity(toWebBrowser);
+                target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
+                Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
+                toWebBrowser.putExtra("url", target);
+                startActivity(toWebBrowser);
 
 
             }

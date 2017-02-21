@@ -19,7 +19,6 @@
         android:elevation="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="5dp"
         android:padding="5dp"
         android:background="@color/colorPrimary_transparent">
 
@@ -116,13 +115,11 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="380dp">
 
             <android.support.v7.widget.RecyclerView
                 android:text=""
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:id="@+id/main_recyclerView_contents_main"
                 android:scrollbars="vertical"
                 android:fadeScrollbars="true"
@@ -130,49 +127,61 @@
                 android:elevation="0dp"
                 android:background="@android:drawable/screen_background_dark_transparent"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:textColor="@android:color/background_light"
-                android:padding="5dp"
-                android:gravity="top|center_vertical" />
+                android:gravity="top|center_vertical"
+                android:layout_height="374dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
         <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_weight="5">
+            android:layout_weight="8">
 
-                <ToggleButton
-                    android:text="ToggleButton"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/main_toggle_button_editable"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_width="0dp"
-                    android:textOff="Read"
-                    android:textOn="Edit"
-                    android:layout_weight="1"
-                    android:background="@android:drawable/screen_background_light_transparent"
-                    android:layout_margin="5dp"
-                    android:minHeight="40dp" />
+            <ToggleButton
+                android:text="ToggleButton"
+                android:layout_height="40dp"
+                android:id="@+id/main_toggle_button_editable"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_width="0dp"
+                android:textOff="Read"
+                android:textOn="Edit"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:minHeight="40dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
 
             <Button
-                    android:text="Preview"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/main_button_preview"
-                    android:layout_weight="1"
-                    android:background="@android:drawable/screen_background_light_transparent"
-                    android:minHeight="40dp"
-                    android:layout_margin="5dp"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_width="0dp" />
+                android:text="Preview"
+                android:layout_height="40dp"
+                android:id="@+id/main_button_preview"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:minHeight="40dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_width="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
