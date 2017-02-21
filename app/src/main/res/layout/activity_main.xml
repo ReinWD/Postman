@@ -161,18 +161,7 @@
                     android:layout_margin="5dp"
                     android:minHeight="40dp" />
 
-                <Button
-                    android:text="Ctrl+a"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/main_button_selectall"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="@android:drawable/screen_background_light_transparent"
-                    android:layout_margin="5dp"
-                    android:minHeight="40dp"/>
-
-                <Button
+            <Button
                     android:text="Preview"
                     android:layout_height="wrap_content"
                     android:id="@+id/main_button_preview"
