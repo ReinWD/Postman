@@ -5,181 +5,179 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp"
-    tools:context="com.zw.postman.MainActivity"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:padding="@dimen/activity_layout_margin_2x"
+    tools:context="com.zw.postman.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="5dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:background="@color/colorPrimary_transparent">
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary_transparent"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:elevation="7dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@android:drawable/screen_background_light_transparent"
-            android:padding="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_height="wrap_content">
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:elevation="7dp"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <Spinner
                 android:id="@+id/main_mode_select"
-                android:elevation="2dp"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0"
                 android:addStatesFromChildren="false"
-                android:gravity="center_vertical|center_horizontal"
                 android:background="@android:drawable/arrow_down_float"
-                android:minHeight="0dp"
                 android:backgroundTint="@color/colorPrimaryDark_transparent"
                 android:backgroundTintMode="src_in"
-                android:layout_height="25dp"
-                android:layout_marginTop="5dp"
-                android:soundEffectsEnabled="true"
-                android:layout_width="0dp"
-                android:layout_weight="0"
-                android:layout_marginBottom="5dp" />
+                android:elevation="2dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:minHeight="0dp"
+                android:soundEffectsEnabled="true" />
 
             <TextView
-                android:text="GET"
                 android:id="@+id/main_text_mode"
-                android:layout_weight="3"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="3"
+                android:background="@color/colorPrimaryDark_transparent"
+                android:clickable="true"
                 android:elevation="0dp"
                 android:gravity="center_vertical|center_horizontal"
-                android:clickable="true"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:background="@color/colorPrimaryDark_transparent"
-                android:layout_marginEnd="5dp" />
+                android:text="GET"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="12">
+                android:layout_height="match_parent"
+                android:layout_weight="12"
+                android:orientation="horizontal">
 
                 <Spinner
+                    android:id="@+id/main_spinner_protocol"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0"
-                    android:id="@+id/main_spinner_protocol"/>
+                    android:layout_weight="0" />
 
                 <TextView
+                    android:id="@+id/main_text_protocol"
+                    android:layout_width="10dp"
                     android:layout_height="match_parent"
-                    android:text="http://"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|center_horizontal"
-                    android:id="@+id/main_text_protocol"
-                    android:layout_width="10dp" />
+                    android:text="http://" />
 
                 <EditText
+                    android:id="@+id/main_et_url_input"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/main_et_url_input"
-                    android:layout_weight="2"
-                    android:textSize="14sp"
-                    android:contentDescription="URL"
-                    android:background="@color/colorPrimary_transparent"
                     android:layout_marginEnd="5dp"
                     android:layout_marginLeft="5dp"
-                    android:padding="5dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="2"
                     android:allowUndo="true"
-                    android:layout_marginStart="2dp" />
+                    android:background="@color/colorPrimary_transparent"
+                    android:contentDescription="URL"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
             <Button
-                android:text="SEND"
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="match_parent"
                 android:id="@+id/main_button_send"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@color/colorPrimaryDark_transparent" />
+                android:layout_weight="3"
+                android:background="@color/colorPrimaryDark_transparent"
+                android:text="SEND" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="380dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
             <android.support.v7.widget.RecyclerView
-                android:text=""
-                android:layout_width="match_parent"
                 android:id="@+id/main_recyclerView_contents_main"
-                android:scrollbars="vertical"
-                android:fadeScrollbars="true"
-                android:overScrollMode="always"
-                android:elevation="0dp"
-                android:background="@android:drawable/screen_background_dark_transparent"
-                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:textColor="@android:color/background_light"
+                android:layout_marginTop="10dp"
+                android:background="@android:drawable/screen_background_dark_transparent"
+                android:fadeScrollbars="true"
                 android:gravity="top|center_vertical"
-                android:layout_height="374dp"
+                android:overScrollMode="always"
                 android:paddingBottom="0dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp"
+                android:scrollbars="vertical"
+                android:text=""
+                android:textColor="@android:color/background_light"
+                android:layout_weight="1">
 
             </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_weight="8">
+            android:orientation="horizontal"
+            android:minHeight="40dp">
 
             <ToggleButton
-                android:text="ToggleButton"
-                android:layout_height="40dp"
                 android:id="@+id/main_toggle_button_editable"
-                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_width="0dp"
-                android:textOff="Read"
-                android:textOn="Edit"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:minHeight="40dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:text="ToggleButton"
+                android:textOff="Read"
+                android:textOn="Edit" />
 
             <Button
-                android:text="Preview"
-                android:layout_height="40dp"
                 android:id="@+id/main_button_preview"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:minHeight="40dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_width="0dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:text="Preview" />
 
         </LinearLayout>
 

@@ -1,14 +1,3 @@
 <resources>
-    <string name="app_name">Postman Mobile</string>
-
-    <string-array name="methods">
-        <item>GET</item>
-        <item>POST</item>
-        <item>PUT</item>
-        <item>PATCH</item>
-        <item>DELETE</item>
-        <item>COPY</item>
-        <item>HEAD</item>
-    </string-array>
-
+    <string name="app_name">Postman</string>
 </resources>

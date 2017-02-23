@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     EditText mURL;
     RecyclerView mContains;
     RecyclerAdapter mRecyclerAdapter;
-    ProgressBar mProgressbar;
     Button mSend;
     Button mPreview;
     ToggleButton mEditable;
