@@ -2,12 +2,10 @@ package com.zw.postman.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.zw.postman.R;
 
@@ -27,16 +25,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.EditT
     private ArrayList<String> mData;
     private Context mContext;
     private boolean mEditable;
-
+    private ArrayList<ArrayList> mArray;
     public RecyclerAdapter(Context context, ArrayList<String> data){
         this.mContext = context;
         this.mData = data;
         this.mEditable = false;
     }
-    public RecyclerAdapter(Context context, ArrayList<String> data, boolean editable
+    public RecyclerAdapter(Context context, ArrayList<ArrayList> data, boolean editable
     ){
         this.mContext = context;
-        this.mData = data;
+        this.mArray = data;
         this.mEditable = editable;
     }
     @Override

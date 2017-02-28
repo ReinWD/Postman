@@ -1,4 +1,4 @@
-package com.zw.postman;
+package com.zw.postman.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,19 +15,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.zw.postman.R;
 import com.zw.postman.adapter.MyAdapter;
 import com.zw.postman.adapter.RecyclerAdapter;
 import com.zw.postman.http.Browser;
@@ -36,6 +32,10 @@ import com.zw.postman.http.HttpRequest;
 import static android.view.KeyEvent.KEYCODE_ENTER;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
+    /**
+     * MainActivity
+     * 本app的主活动
+     */
     Context mMain = this;
     URL mRequestURL;
     Spinner mModeSelect;
@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     EditText mURL;
     RecyclerView mContains;
     RecyclerAdapter mRecyclerAdapter;
-    ProgressBar mProgressbar;
     Button mSend;
     Button mPreview;
     ToggleButton mEditable;
@@ -61,8 +60,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Thread mMainActivityThread = new Thread(this);
         mMainActivityThread.start();
     }
-
-
+    /**
+    * 为必要的下拉框插入数据
+    */
     private void initData() {
         mModes.add("GET");
         mModes.add("POST");
@@ -71,9 +71,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mModes.add("DELETE");
         mModes.add("COPY");
         mModes.add("PATCH");
-        mModes.add("ADVANCED");
     }
-
+    /**
+     * 为了不在主线使用网络请求而独立出来的Thread
+     */
     public class HttpThread extends Thread {
         @Override
         public void run() {
@@ -176,14 +177,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String target = mModeSelect.getItemAtPosition(position).toString();
-                if (target.equals("ADVANCED")) {
-                    Intent intent = new Intent(MainActivity.this, AdvancedSettingActivity.class);
-                    startActivity(intent);
-                }
                 mModeDisplay.setText(target);
             }
             //选中的条目会实时显示在spinner旁边的TextView里
-
+            //选中ADVANCED即可开启高级模式
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }

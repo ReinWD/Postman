@@ -1,16 +1,57 @@
 Postman 移动端
 
 API 14;
-开发目的: 寒假作业+练手+学习一个 HTTP的姿势;(@某随学姐)
+开发目的: 寒假作业+练手+学习一个 HTTP的姿势;
 
-包内文件说明：
-com.zw.postman.MainActivity :
-    主Activity,包括了所有可进行的操作;
-com.zw.postman.http.HttpRequest :
-    网络请求模块，
+包内文件提要(具体用法之类的看注释吧~)：
+com.zw.postman.
+    adapter.
+        MyAdapter:
+            SpinnerAdapter,用于主活动中请求模式的选择(以及原版的协议选择）
+
+        RecyclerAdapter：
+            主活动中RecyclerView的适配器
+
+    activities.
+        MainActivity :
+            主Activity,包括了所有可进行的操作;
+
+        AdvancedSettingActivity:
+            原params方案，后改为小窗口;
+
+    components.
+        Params:
+            用于管理输入参数的类
+
+    http.
+        Browser:
+            用于预览页面的Activity;
+
+        HttpRequest :
+            网络请求模块;
+
+运行路径：
+
+    MainActivity----->Browser
+        └---->AdvancedSettingActivity
 
 <开发日志:2017/2/7>
 完成了代码读取部分的代码;
 开始记录开发日志;
+
+<开发日志:2017/2/28>
+开学了，整理一下中间干的事:
+    1.代码显示模块:
+        优化了数据存储与显示模块，在实机上跑不再卡了;
+        返回代码会按照">"来自动换行;
+        通过点击"Read"按钮可以在只读模式与可编辑模式无缝切换;
+    2.加入了Params编辑模块，可以编辑参数了;
+    3.加入了Preview模块，点击后将在浏览器内显示所输入URL对应的页面;
+    4.URL协议选择:优化了选取方式，不需要再从下拉框里选择仅支持的两种协议了(qwq);
+    5.xml布局优化;
+
+
+
+
 
 

@@ -9,7 +9,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="10dp"
-    tools:context="com.zw.postman.MainActivity"
+    tools:context="com.zw.postman.activities.MainActivity"
     android:background="@color/colorBackground">
 
     <LinearLayout

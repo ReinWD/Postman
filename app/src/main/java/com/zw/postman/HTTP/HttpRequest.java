@@ -1,5 +1,7 @@
 package com.zw.postman.http;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class HttpRequest {
+    private static final String TAG = "HttpRequest";
     /**
      * declaration.
      * mRequestUrl :
@@ -86,8 +89,8 @@ public class HttpRequest {
 
                     responseCode = mHttpRequest.getResponseCode();
                     message = mHttpRequest.getResponseMessage();
-                    System.out.println(responseCode);
-                    System.out.println(message);
+                    Log.d(TAG, "Request: "+responseCode);
+                    Log.d(TAG, "Request: "+message);
                     result = response(mHttpRequest, responseCode);
 
                     if (result.isEmpty()) {
@@ -104,8 +107,8 @@ public class HttpRequest {
 
                     responseCode = mHttpSRequest.getResponseCode();
                     message = mHttpSRequest.getResponseMessage();
-                    System.out.println(responseCode);
-                    System.out.println(message);
+                    Log.d(TAG, "Request: "+responseCode);
+                    Log.d(TAG, "Request: "+message);
                     result = response(mHttpSRequest, responseCode);
 
                     if (result.isEmpty()) {
@@ -118,11 +121,11 @@ public class HttpRequest {
                     break;
             }
         } catch (SocketTimeoutException e1) {
-            System.out.println("连接超时");
+            Log.d(TAG, "Request: 连接超时");
             result = new ArrayList<>();
             result.add("Connect Time Out!");
         } catch (UnknownHostException e2) {
-            System.out.println("URL 错误");
+            Log.d(TAG, "Request: URL错误");
             result = new ArrayList<>();
             result.add("check your URL or Internet connection");
         }
@@ -296,10 +299,10 @@ public class HttpRequest {
         judgement = url.toString().toLowerCase();
         if (judgement.isEmpty()) {
         } else if (judgement.startsWith("https")) {
-            System.out.println("HTTPS");
+            Log.v(TAG,"mode: HTTPS");
             protocolNum = 2;
         } else if (judgement.startsWith("http")) {
-            System.out.println("HTTP");
+            Log.v(TAG, "mode: HTTP");
             protocolNum = 1;
         } else {
             String mProtocol = protocol.replace("://", "");

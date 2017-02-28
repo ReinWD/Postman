@@ -8,4 +8,5 @@
     <color name="colorPrimaryDark_transparent">#64222222</color>
     <color name="font">#baffffff</color>
     <color name="none">#00f47023</color>
+    <color name="colorLight_transparent">#62c2c2c2</color>
 </resources>
