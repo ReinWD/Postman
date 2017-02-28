@@ -1,10 +1,11 @@
-package com.zw.postman;
+package com.zw.postman.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.zw.postman.R;
 import com.zw.postman.adapter.RecyclerAdapter;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class AdvancedSettingActivity extends AppCompatActivity {
          * RecyclerView
          */
         mMenu = (RecyclerView) findViewById(R.id.advanced_recyclerview);
-        mRecyclerAdapter = new RecyclerAdapter(this,)
     }
     void init(){
         mData = new ArrayList();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_layout_margin"
+        android:layout_marginRight="@dimen/activity_layout_margin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorLight_transparent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/activity_layout_margin"
+                android:layout_marginLeft="@dimen/activity_layout_margin"
+                android:layout_marginRight="@dimen/activity_layout_margin"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_dark_transparent"
+                android:gravity="right|center_vertical"
+                android:padding="@dimen/activity_layout_margin"
+                android:text="@string/params_key"
+                android:textColor="@color/colorLight_transparent" />
+
+            <EditText
+                android:id="@+id/params_et_value"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/activity_layout_margin"
+                android:layout_marginTop="@dimen/activity_layout_margin"
+                android:layout_weight="1"
+                android:background="@android:drawable/screen_background_dark_transparent"
+                android:gravity="right|center_vertical"
+                android:padding="@dimen/activity_layout_margin"
+                android:text="@string/params_value"
+                android:textColor="@color/colorLight_transparent" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
