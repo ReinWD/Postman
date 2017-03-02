@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     RecyclerAdapter mRecyclerAdapter;
     Button mSend;
     Button mPreview;
+    Button mMoreSetting;
     ToggleButton mEditable;
     ArrayList<String> mModes = new ArrayList<>();
     ArrayList<String> mData = new ArrayList<>();
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
          */
         mSend = (Button) findViewById(R.id.main_button_send);
         mPreview = (Button) findViewById(R.id.main_button_preview);
+        mMoreSetting = (Button) findViewById(R.id.params_button_more);
         mEditable = (ToggleButton) findViewById(R.id.main_toggle_button_editable);
         mEditable.setChecked(false);
         /**
@@ -244,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isURLNull()){
                 String target;
 //                File html=null;
 //                String wow = mData.toString();
@@ -266,10 +270,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
                 Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
                 toWebBrowser.putExtra("url", target);
-                startActivity(toWebBrowser);
-
-
+                startActivity(toWebBrowser);}
+                else {
+                    Toast.makeText(getApplicationContext(),"Please check your URL",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+        //------------------------------------------------------------------------------------------
+        mMoreSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,AdvancedSettingActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+    private boolean isURLNull(){
+        return mURL.getText().toString().isEmpty();
+    }
+    private void makeToast(String message){
     }
 }

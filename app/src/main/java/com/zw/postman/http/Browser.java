@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.zw.postman.R;
@@ -30,7 +29,7 @@ public class Browser extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.web_browser);
+        this.setContentView(R.layout.activity_web_browser);
 
         /**ToolBar*/
         mToolBar = (Toolbar) findViewById(R.id.browser_toolbar);

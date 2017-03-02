@@ -40,7 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter <RecyclerAdapter.EditT
     @Override
     public EditTextHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             editTextHolder = new EditTextHolder(LayoutInflater.from(mContext).
-                inflate(R.layout.main_recycler_view_editable, parent, false));
+                inflate(R.layout.main_recycler_view, parent, false));
         editTextHolder.setEditable();
         return editTextHolder;
     }
