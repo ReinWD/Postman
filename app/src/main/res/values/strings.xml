@@ -11,4 +11,6 @@
     <string name="read_state_read">READ</string>
     <string name="read_state_edit">EDIT</string>
     <string name="preview_button">PREVIEW</string>
+    <string name="params_title">Add Params</string>
+    <string name="advanced_finish">FINISH</string>
 </resources>

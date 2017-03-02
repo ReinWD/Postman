@@ -25,6 +25,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".activities.AdvancedSettingActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.Dialog">
         </activity>
     </application>
