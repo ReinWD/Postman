@@ -5,12 +5,14 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -29,7 +31,8 @@ public class HttpRequest {
     private URL mRequestUrl;
     private String mMethod;
     private int protocolNum;
-    private Map mParams;
+    private HashMap<String, String> mParams;
+    private boolean hasParams;
 
     /**
      * A constructor
@@ -49,11 +52,14 @@ public class HttpRequest {
 
     /**
      * set params for your connection.
+     * if you don't have params, this method won't be called.
+     *
      * @param map params
-     *            usage:Map<key,value>
+     *            usage:HashMap<String key,String value>
      */
-    public void setParams(Map<String,String> map){
+    public void setParams(HashMap<String, String> map) {
         mParams = map;
+        hasParams = true;
     }
 
     /**
@@ -78,6 +84,9 @@ public class HttpRequest {
         int responseCode;
         ArrayList<String> result;
         String message;
+
+
+
         try {
             switch (protocolNum) {
                 case 1:
@@ -86,11 +95,23 @@ public class HttpRequest {
                     mHttpRequest.setRequestMethod(mMethod);
                     mHttpRequest.setConnectTimeout(5000);
                     mHttpRequest.setReadTimeout(10000);
+                    mHttpRequest.setDoOutput(true);
+                    mHttpRequest.connect();
+                    /*
+                     * 如果有参数就加上
+                     */
+                    OutputStream out = mHttpRequest.getOutputStream();
+                    if (hasParams) {
+                        for (HashMap.Entry param :
+                                new ArrayList<HashMap.Entry>(mParams.entrySet())) {
+                            out.write((param.getKey()+"="+param.getValue()).getBytes());
+                        }
+                    }
 
                     responseCode = mHttpRequest.getResponseCode();
                     message = mHttpRequest.getResponseMessage();
-                    Log.d(TAG, "Request: "+responseCode);
-                    Log.d(TAG, "Request: "+message);
+                    Log.d(TAG, "Request: " + responseCode);
+                    Log.d(TAG, "Request: " + message);
                     result = response(mHttpRequest, responseCode);
 
                     if (result.isEmpty()) {
@@ -104,11 +125,21 @@ public class HttpRequest {
                     mHttpSRequest.setRequestMethod(mMethod);
                     mHttpSRequest.setConnectTimeout(5000);
                     mHttpSRequest.setReadTimeout(10000);
+                    mHttpSRequest.setDoOutput(true);
+                    mHttpSRequest.connect();
+
+                    OutputStream outS = mHttpSRequest.getOutputStream();
+                    if (hasParams) {
+                        for (HashMap.Entry param :
+                                new ArrayList<HashMap.Entry>(mParams.entrySet())) {
+                            outS.write((param.getKey()+"="+param.getValue()).getBytes());
+                        }
+                    }
 
                     responseCode = mHttpSRequest.getResponseCode();
                     message = mHttpSRequest.getResponseMessage();
-                    Log.d(TAG, "Request: "+responseCode);
-                    Log.d(TAG, "Request: "+message);
+                    Log.d(TAG, "Request: " + responseCode);
+                    Log.d(TAG, "Request: " + message);
                     result = response(mHttpSRequest, responseCode);
 
                     if (result.isEmpty()) {
@@ -299,7 +330,7 @@ public class HttpRequest {
         judgement = url.toString().toLowerCase();
         if (judgement.isEmpty()) {
         } else if (judgement.startsWith("https")) {
-            Log.v(TAG,"mode: HTTPS");
+            Log.v(TAG, "mode: HTTPS");
             protocolNum = 2;
         } else if (judgement.startsWith("http")) {
             Log.v(TAG, "mode: HTTP");

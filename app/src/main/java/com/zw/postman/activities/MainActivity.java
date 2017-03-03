@@ -27,10 +27,13 @@ import java.util.ArrayList;
 import com.zw.postman.R;
 import com.zw.postman.adapter.MyAdapter;
 import com.zw.postman.adapter.RecyclerAdapter;
+import com.zw.postman.components.Params;
 import com.zw.postman.http.Browser;
 import com.zw.postman.http.HttpRequest;
 
 import static android.view.KeyEvent.KEYCODE_ENTER;
+import static com.zw.postman.activities.AdvancedSettingActivity.PARAMS_EXIST;
+import static com.zw.postman.activities.AdvancedSettingActivity.PARAMS_NOT_EXIST;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     /**
@@ -43,8 +46,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     TextView mModeDisplay;
     TextView mProtocolDisplay;
     EditText mURL;
+    EditText mKey;
+    EditText mValue;
     RecyclerView mContains;
     RecyclerAdapter mRecyclerAdapter;
+    Params mParams;
     Button mSend;
     Button mPreview;
     Button mMoreSetting;
@@ -52,6 +58,18 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     ArrayList<String> mModes = new ArrayList<>();
     ArrayList<String> mData = new ArrayList<>();
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case PARAMS_EXIST:
+                mParams = new Params(data);
+                break;
+            case PARAMS_NOT_EXIST:
+                System.out.println("wow");
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +80,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Thread mMainActivityThread = new Thread(this);
         mMainActivityThread.start();
     }
+
     /**
-    * 为必要的下拉框插入数据
-    */
+     * 为必要的下拉框插入数据
+     */
     private void initData() {
         mModes.add("GET");
         mModes.add("POST");
@@ -74,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mModes.add("COPY");
         mModes.add("PATCH");
     }
+
     /**
      * 为了不在主线使用网络请求而独立出来的Thread
      */
@@ -91,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
             try {
                 HttpRequest httpRequest = new HttpRequest(mRequestURL, mModeSelect.getSelectedItem().toString(), mProtocolDisplay.getText().toString().toLowerCase());
+                if (checkParams()) {
+                    httpRequest.setParams(mParams.getData());
+                }
                 switch (httpRequest.getProtocol()) {
                     case 1:
                         System.out.println("开始进行第一次HTTP连接尝试");
@@ -103,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
                 mData = new ArrayList<>();
-                mData.add("A problem occurred\\nCheck your URL\\nor your network connection");
+                mData.add("A problem occurred\nCheck your URL, params\nor your network connection");
             }
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -115,6 +138,16 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             });
         }
 
+        private boolean checkParams() {
+            if (!mKey.getText().toString().equals("")) {
+                mParams = new Params(mKey.getText().toString(),mValue.getText().toString());
+                return mParams.hasParams();
+            }
+            if (!(mParams == null)) {
+                return mParams.hasParams();
+            }
+          return false;
+        }
     }
 
     @Override
@@ -134,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
          * EditText
          */
         mURL = (EditText) findViewById(R.id.main_et_url_input);
+        mKey = (EditText) findViewById(R.id.params_et_key);
+        mValue = (EditText) findViewById(R.id.params_et_value);
         /**
          * Button
          * ToggleButton
@@ -182,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 String target = mModeSelect.getItemAtPosition(position).toString();
                 mModeDisplay.setText(target);
             }
+
             //选中的条目会实时显示在spinner旁边的TextView里
             //选中ADVANCED即可开启高级模式
             @Override
@@ -247,8 +283,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isURLNull()){
-                String target;
+                if (!isURLNull()) {
+                    String target;
 //                File html=null;
 //                String wow = mData.toString();
 //                boolean finish;
@@ -267,12 +303,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 //                            }
 //                        }
 //                    }
-                target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
-                Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
-                toWebBrowser.putExtra("url", target);
-                startActivity(toWebBrowser);}
-                else {
-                    Toast.makeText(getApplicationContext(),"Please check your URL",Toast.LENGTH_SHORT).show();
+                    target = mProtocolDisplay.getText().toString() + mURL.getText().toString();
+                    Intent toWebBrowser = new Intent(MainActivity.this, Browser.class);
+                    toWebBrowser.putExtra("url", target);
+                    startActivity(toWebBrowser);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please check your URL", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -280,14 +316,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mMoreSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AdvancedSettingActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AdvancedSettingActivity.class);
+                startActivityForResult(intent, 0);
             }
         });
+        //------------------------------------------------------------------------------------------
+
     }
-    private boolean isURLNull(){
+
+    private boolean isURLNull() {
         return mURL.getText().toString().isEmpty();
-    }
-    private void makeToast(String message){
     }
 }

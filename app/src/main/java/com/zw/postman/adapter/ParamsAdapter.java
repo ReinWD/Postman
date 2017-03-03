@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import com.zw.postman.R;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Adapter for RecyclerView used in "More params" Activity
  * Created by ZW on 2017/3/1.
@@ -26,8 +23,6 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
     private ParamsAdapter mAdapter = this;
     private Context mContext;
     private int mViewCount = 1;
-
-    private HashMap mParams = new HashMap<String, String>();
 
     public ParamsAdapter(Context context) {
         this.mContext = context;
@@ -60,7 +55,6 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
 
         InsertItem insertItem = new InsertItem(holder);
         OnEnterDownListener enterDownListener = new OnEnterDownListener();
-        SetKeyValue skv = new SetKeyValue(holder.mKey, holder.mValue);
 
         holder.mKey.setOnTouchListener(insertItem);
         holder.mValue.setOnTouchListener(insertItem);
@@ -71,22 +65,10 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
             public void onClick(View v) {
                 if (mViewCount > 1) {
                     mViewCount--;
-                    mAdapter.notifyItemRemoved(position);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         });
-        holder.mKey.setOnFocusChangeListener(skv);
-        holder.mValue.setOnFocusChangeListener(skv);
-
-    }
-
-    public HashMap getData() {
-        return mParams;
-    }
-
-    public HashMap<String, String> getParams() {
-
-        return mParams;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -157,26 +139,4 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
         }
     }
 
-    private class SetKeyValue implements View.OnFocusChangeListener {
-        EditText key;
-        EditText value;
-        String keyValue;
-        String valueValue;
-
-        SetKeyValue(EditText keyValue, EditText valueValue) {
-            this.key = keyValue;
-            this.value = valueValue;
-        }
-
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus) {
-                keyValue = key.getText().toString();
-                valueValue = value.getText().toString();
-                if (!valueValue.equals("") && !keyValue.equals("")) {
-                    mParams.put(key, value);
-                }
-            }
-        }
-    }
 }

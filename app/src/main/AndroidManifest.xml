@@ -17,17 +17,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".http.Browser">
-        </activity>
+        <activity android:name=".http.Browser"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".activities.AdvancedSettingActivity"
+        <activity
+            android:name=".activities.AdvancedSettingActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Dialog">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+        <activity android:name=".activities.HistoryActivity"></activity>
     </application>
 
 </manifest>
