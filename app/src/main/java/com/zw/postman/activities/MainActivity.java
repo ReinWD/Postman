@@ -2,9 +2,12 @@ package com.zw.postman.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import com.zw.postman.R;
 import com.zw.postman.adapter.MyAdapter;
 import com.zw.postman.adapter.RecyclerAdapter;
+import com.zw.postman.components.History;
 import com.zw.postman.components.Params;
 import com.zw.postman.http.Browser;
 import com.zw.postman.http.HttpRequest;
@@ -34,6 +38,7 @@ import com.zw.postman.http.HttpRequest;
 import static android.view.KeyEvent.KEYCODE_ENTER;
 import static com.zw.postman.activities.AdvancedSettingActivity.PARAMS_EXIST;
 import static com.zw.postman.activities.AdvancedSettingActivity.PARAMS_NOT_EXIST;
+import static com.zw.postman.activities.HistoryActivity.ITEM_SELECTED;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     /**
@@ -54,9 +59,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     Button mSend;
     Button mPreview;
     Button mMoreSetting;
+    Button mCheckHistory;
     ToggleButton mEditable;
     ArrayList<String> mModes = new ArrayList<>();
     ArrayList<String> mData = new ArrayList<>();
+    public static ArrayList<History> mHistory =  new ArrayList<>();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -67,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 break;
             case PARAMS_NOT_EXIST:
                 System.out.println("wow");
+                break;
+            case ITEM_SELECTED:
+                mURL.setText(data.getStringExtra("url"));
+                mSend.performClick();
                 break;
         }
     }
@@ -167,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
          * EditText
          */
         mURL = (EditText) findViewById(R.id.main_et_url_input);
+        mURL.setSingleLine();
         mKey = (EditText) findViewById(R.id.params_et_key);
         mValue = (EditText) findViewById(R.id.params_et_value);
         /**
@@ -176,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mSend = (Button) findViewById(R.id.main_button_send);
         mPreview = (Button) findViewById(R.id.main_button_preview);
         mMoreSetting = (Button) findViewById(R.id.params_button_more);
+        mCheckHistory = (Button) findViewById(R.id.main_button_history);
         mEditable = (ToggleButton) findViewById(R.id.main_toggle_button_editable);
         mEditable.setChecked(false);
         /**
@@ -185,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mRecyclerAdapter = new RecyclerAdapter(this, mData);
         mContains.setAdapter(mRecyclerAdapter);
         mContains.setLayoutManager(new LinearLayoutManager(this));
+
         /**
          * Adapter
          */
@@ -206,7 +220,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KEYCODE_ENTER) {
                     mSend.performClick();
+                    try {
+                        getCurrentFocus().clearFocus();
+                    } catch (Exception e) {
+                    }
                 }
+
                 return false;
             }
         });
@@ -270,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 } else {
                     httpRequestThread.interrupt();
                 }
+                mHistory.add(new History(mProtocolDisplay.getText().toString(),mURL.getText().toString()));
+
             }
         });
         //------------------------------------------------------------------------------------------
@@ -321,9 +342,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
         //------------------------------------------------------------------------------------------
-
+        mCheckHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startHistoryActivity = new Intent(MainActivity.this,HistoryActivity.class);
+                startActivityForResult(startHistoryActivity,0);
+            }
+        });
     }
-
     private boolean isURLNull() {
         return mURL.getText().toString().isEmpty();
     }

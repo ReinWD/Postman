@@ -3,14 +3,16 @@
     <string name="params_key">Key</string>
     <string name="params_value">Value</string>
     <string name="params_hint">Params</string>
+    <string name="params_button_more">MORE</string>
     <string name="url_hint">input your URL</string>
-    <string name="button_send">SEND</string>
     <string name="spinner_get">GET</string>
     <string name="protocol_http">http://</string>
-    <string name="params_button_more">MORE</string>
-    <string name="read_state_read">READ</string>
-    <string name="read_state_edit">EDIT</string>
-    <string name="preview_button">PREVIEW</string>
+    <string name="button_send">SEND</string>
+    <string name="button_read_state_read">READ</string>
+    <string name="button_read_state_edit">EDIT</string>
+    <string name="button_preview">PREVIEW</string>
     <string name="params_title">Add Params</string>
     <string name="advanced_finish">FINISH</string>
+    <string name="button_history">HISTORY</string>
+    <string name="recycler_sample">github.com/ReinWD</string>
 </resources>

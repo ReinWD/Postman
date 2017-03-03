@@ -12,11 +12,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:background="@color/colorPrimary_transparent"
         android:orientation="vertical"
-        android:padding="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true">
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:id="@+id/main_spinner_protocol"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0"/>
+                    android:layout_weight="0" />
 
                 <TextView
                     android:id="@+id/main_text_protocol"
@@ -73,7 +73,7 @@
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="@string/protocol_http"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <EditText
                     android:id="@+id/main_et_url_input"
@@ -84,8 +84,8 @@
                     android:layout_marginStart="2dp"
                     android:layout_weight="2"
                     android:background="@color/colorPrimary_transparent"
-                    android:hint="@string/url_hint"
                     android:ems="10"
+                    android:hint="@string/url_hint"
                     android:padding="5dp"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -106,55 +106,59 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_layout_margin"
             android:layout_marginRight="@dimen/activity_layout_margin"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:padding="@dimen/activity_layout_margin_2x"
-                android:text="@string/params_hint"
+                android:background="@android:drawable/screen_background_light_transparent"
                 android:gravity="center"
-                android:background="@android:drawable/screen_background_light_transparent"/>
+                android:padding="@dimen/activity_layout_margin_2x"
+                android:text="@string/params_hint" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:background="@color/colorLight_transparent">
+                android:background="@color/colorLight_transparent"
+                android:orientation="horizontal">
+
                 <EditText
                     android:id="@+id/params_et_key"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_margin="@dimen/activity_layout_margin"
                     android:layout_marginLeft="@dimen/activity_layout_margin"
                     android:layout_marginRight="@dimen/activity_layout_margin"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/screen_background_dark_transparent"
                     android:gravity="right|center_vertical"
                     android:hint="@string/params_key"
-                    android:textColor="@color/font"
-                    android:textColorHint="@color/colorLight_transparent"
-                    android:background="@android:drawable/screen_background_dark_transparent"
                     android:padding="@dimen/activity_layout_margin"
-                    android:layout_margin="@dimen/activity_layout_margin"/>
+                    android:textColor="@color/font"
+                    android:textColorHint="@color/colorLight_transparent" />
+
                 <EditText
                     android:id="@+id/params_et_value"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/activity_layout_margin"
+                    android:layout_marginTop="@dimen/activity_layout_margin"
                     android:layout_weight="1"
+                    android:background="@android:drawable/screen_background_dark_transparent"
                     android:gravity="right|center_vertical"
                     android:hint="@string/params_value"
-                    android:textColor="@color/font"
-                    android:textColorHint="@color/colorLight_transparent"
                     android:padding="@dimen/activity_layout_margin"
-                    android:layout_marginTop="@dimen/activity_layout_margin"
-                    android:layout_marginBottom="@dimen/activity_layout_margin"
-                    android:background="@android:drawable/screen_background_dark_transparent"/>
+                    android:textColor="@color/font"
+                    android:textColorHint="@color/colorLight_transparent" />
+
                 <Button
+                    android:id="@+id/params_button_more"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.6"
-                    android:id="@+id/params_button_more"
                     android:padding="0dp"
                     android:text="@string/params_button_more"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -168,10 +172,10 @@
                 android:id="@+id/main_recyclerView_contents_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/activity_layout_margin"
                 android:layout_marginEnd="@dimen/activity_layout_margin"
                 android:layout_marginLeft="@dimen/activity_layout_margin"
                 android:layout_marginStart="@dimen/activity_layout_margin"
+                android:layout_marginTop="@dimen/activity_layout_margin"
                 android:background="@android:drawable/screen_background_dark_transparent"
                 android:fadeScrollbars="true"
                 android:gravity="top|center_vertical"
@@ -207,8 +211,22 @@
                 android:layout_weight="1"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:minHeight="40dp"
-                android:textOff="@string/read_state_read"
-                android:textOn="@string/read_state_edit" />
+                android:textOff="@string/button_read_state_read"
+                android:textOn="@string/button_read_state_edit" />
+
+            <Button
+                android:id="@+id/main_button_history"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
+                android:layout_gravity="center"
+                android:minHeight="40dp"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:text="@string/button_history" />
 
             <Button
                 android:id="@+id/main_button_preview"
@@ -222,7 +240,7 @@
                 android:layout_weight="1"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:minHeight="40dp"
-                android:text="@string/preview_button" />
+                android:text="@string/button_preview" />
 
         </LinearLayout>
 

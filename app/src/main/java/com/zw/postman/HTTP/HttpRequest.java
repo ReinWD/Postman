@@ -107,7 +107,7 @@ public class HttpRequest {
                             out.write((param.getKey()+"="+param.getValue()).getBytes());
                         }
                     }
-
+                    mHttpRequest.disconnect();
                     responseCode = mHttpRequest.getResponseCode();
                     message = mHttpRequest.getResponseMessage();
                     Log.d(TAG, "Request: " + responseCode);
@@ -135,7 +135,7 @@ public class HttpRequest {
                             outS.write((param.getKey()+"="+param.getValue()).getBytes());
                         }
                     }
-
+                    mHttpSRequest.disconnect();
                     responseCode = mHttpSRequest.getResponseCode();
                     message = mHttpSRequest.getResponseMessage();
                     Log.d(TAG, "Request: " + responseCode);
